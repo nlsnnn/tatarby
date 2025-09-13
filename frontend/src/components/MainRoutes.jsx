@@ -1,8 +1,8 @@
 import React from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import HomePage from "../pages/Home.jsx";
-import AboutPage from "../pages/About.jsx";
 import RepetPage from "../pages/Repet.jsx";
+import TranslatePage from "../pages/Translate.jsx";
 import LoginPage from "../pages/Login.jsx";
 import AdminPage from "../pages/Admin.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
@@ -13,7 +13,7 @@ const MainRoutes = () => {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/repet" element={<RepetPage />} />
-                <Route path="/about" element={<AboutPage />} />
+                <Route path="/translate" element={<TranslatePage />} />
                 <Route path="/login" element={<LoginPage />} />
 
                 <Route

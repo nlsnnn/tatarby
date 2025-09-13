@@ -17,8 +17,8 @@ export default function Header() {
                     <Link to="/repet" className={styles.link}>
                         Репетитор
                     </Link>
-                    <Link to="/about" className={styles.link}>
-                        О нас
+                    <Link to="/translate" className={styles.link}>
+                        Переводчик
                     </Link>
                 </nav>
 

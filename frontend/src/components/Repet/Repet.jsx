@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import styles from "./Repet.module.css";
 import { useStores } from "../../stores/RootStoreContext.jsx";
-
-const apiUrl = "http://localhost:5000"; // твой бекенд
+import {apiUrl} from "../../constants.js";
 
 const topics = [
     "Расскажите о своём любимом фильме и почему он вам нравится.",
