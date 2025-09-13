@@ -3,9 +3,9 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import HomePage from "../pages/Home.jsx";
 import RepetPage from "../pages/Repet.jsx";
 import TranslatePage from "../pages/Translate.jsx";
-import LoginPage from "../pages/Login.jsx";
 import AdminPage from "../pages/Admin.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
+import ProfilePage from "../pages/Profile.jsx";
 
 const MainRoutes = () => {
     return (
@@ -14,7 +14,7 @@ const MainRoutes = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/repet" element={<RepetPage />} />
                 <Route path="/translate" element={<TranslatePage />} />
-                <Route path="/login" element={<LoginPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
 
                 <Route
                     path="/admin"

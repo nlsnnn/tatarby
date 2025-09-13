@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import axios from "axios";
 import styles from "./Repet.module.css";
 import { useStores } from "../../stores/RootStoreContext.jsx";
-import { apiUrl } from "../../constants.js";
+import {apiSpeechUrl, apiUrl} from "../../constants.js";
 
 const topics = [
     "Расскажите о своём любимом фильме и почему он вам нравится.",
@@ -59,7 +59,7 @@ const Repet = observer(() => {
         setLoading(true);
 
         try {
-            const { data } = await axios.post(`${apiUrl}/recognize`, { text: msg.text });
+            const { data } = await axios.post(`${apiSpeechUrl}/recognize`, { text: msg.text });
             chat.addBotMessage(data);
         } catch (e) {
             chat.addBotMessage({ text: "Ошибка соединения с сервером." });
@@ -141,25 +141,21 @@ const Repet = observer(() => {
                         key={msg.id}
                         className={`${styles.message} ${msg.type === "user" ? styles.userMsg : styles.botMsg}`}
                     >
+                        {/* Пользовательский текст или текст бота */}
                         {msg.text && <div className={styles.textBlock}>{msg.text}</div>}
+
+                        {/* Аудио-блок */}
                         {msg.audio && (
                             <div className={styles.audioMessage}>
                                 <audio controls src={msg.audio} />
                             </div>
                         )}
+
+                        {/* Только feedback от бота */}
                         {msg.feedback && <div className={styles.feedback}>{msg.feedback}</div>}
-                        {msg.structure && (
-                            <div className={styles.structure}>
-                                {msg.structure.sentence.map((s, i) => (
-                                    <div key={i} className={styles.wordBlock}>
-                                        <p><b>{s.word}</b> {s.type}</p>
-                                        <pre className={styles.translation}>{s.translation}</pre>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
                     </div>
                 ))}
+
                 <div ref={chatEndRef} />
             </div>
 

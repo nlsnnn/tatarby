@@ -20,6 +20,9 @@ export default function Header() {
                     <Link to="/translate" className={styles.link}>
                         Переводчик
                     </Link>
+                    <Link to="/profile" className={styles.link}>
+                        Профиль
+                    </Link>
                 </nav>
 
                 <button

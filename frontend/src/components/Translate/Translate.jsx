@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Translate.module.css";
-import { apiUrl } from "../../constants.js";
+import {apiSpeechUrl} from "../../constants.js";
 
 const Translate = () => {
     const [input, setInput] = useState("");
@@ -21,7 +21,7 @@ const Translate = () => {
         const timer = setTimeout(async () => {
             setLoading(true);
             try {
-                const { data } = await axios.post(`${apiUrl}/recognize`, { text: input });
+                const { data } = await axios.post(`${apiSpeechUrl}/recognize`, { text: input });
                 setOutput(data.translated);
 
                 const newRecord = { id: Date.now(), input, output: data.translated };
@@ -41,7 +41,7 @@ const Translate = () => {
     const handleSpeak = async () => {
         if (!output) return;
         try {
-            const { data } = await axios.post(`${apiUrl}/synthesize`, { text: output });
+            const { data } = await axios.post(`${apiSpeechUrl}/synthesize`, { text: output });
             if (data.audio) {
                 const audio = new Audio(`data:audio/wav;base64,${data.audio}`);
                 audio.play();
