@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
+import axios from "axios";
 import styles from "./Repet.module.css";
 import { useStores } from "../../stores/RootStoreContext.jsx";
-import {apiUrl} from "../../constants.js";
+import { apiUrl } from "../../constants.js";
 
 const topics = [
     "Расскажите о своём любимом фильме и почему он вам нравится.",
@@ -58,12 +59,7 @@ const Repet = observer(() => {
         setLoading(true);
 
         try {
-            const res = await fetch(`${apiUrl}/recognize`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: msg.text })
-            });
-            const data = await res.json();
+            const { data } = await axios.post(`${apiUrl}/recognize`, { text: msg.text });
             chat.addBotMessage(data);
         } catch (e) {
             chat.addBotMessage({ text: "Ошибка соединения с сервером." });
@@ -97,17 +93,15 @@ const Repet = observer(() => {
                     try {
                         const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
                         const dataUrl = await blobToDataURL(audioBlob);
-                        const userMsg = chat.addMessage({ audio: dataUrl, text: "" });
+                        chat.addMessage({ audio: dataUrl, text: "" });
 
                         setLoading(true);
                         const formData = new FormData();
                         formData.append("file", audioBlob, "voice.webm");
 
-                        const res = await fetch(`${apiUrl}/recognize`, {
-                            method: "POST",
-                            body: formData
+                        const { data } = await axios.post(`${apiUrl}/recognize`, formData, {
+                            headers: { "Content-Type": "multipart/form-data" }
                         });
-                        const data = await res.json();
                         chat.addBotMessage(data);
                     } catch (e) {
                         chat.addBotMessage({ text: "Ошибка при обработке аудио." });

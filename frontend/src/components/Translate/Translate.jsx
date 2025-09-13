@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "./Translate.module.css";
 import { apiUrl } from "../../constants.js";
 
@@ -20,12 +21,7 @@ const Translate = () => {
         const timer = setTimeout(async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${apiUrl}/recognize`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: input }),
-                });
-                const data = await res.json();
+                const { data } = await axios.post(`${apiUrl}/recognize`, { text: input });
                 setOutput(data.translated);
 
                 const newRecord = { id: Date.now(), input, output: data.translated };
@@ -37,7 +33,7 @@ const Translate = () => {
             } finally {
                 setLoading(false);
             }
-        }, 500);
+        }, 500); // debounce
 
         return () => clearTimeout(timer);
     }, [input]);
@@ -45,12 +41,7 @@ const Translate = () => {
     const handleSpeak = async () => {
         if (!output) return;
         try {
-            const res = await fetch(`${apiUrl}/synthesize`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: output }),
-            });
-            const data = await res.json();
+            const { data } = await axios.post(`${apiUrl}/synthesize`, { text: output });
             if (data.audio) {
                 const audio = new Audio(`data:audio/wav;base64,${data.audio}`);
                 audio.play();
