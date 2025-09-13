@@ -3,14 +3,55 @@ import { observer } from "mobx-react-lite";
 import axios from "axios";
 import styles from "./Repet.module.css";
 import { useStores } from "../../stores/RootStoreContext.jsx";
-import {apiSpeechUrl} from "../../constants.js";
+import { apiSpeechUrl } from "../../constants.js";
 
+// Тема + словарь примеров
 const topics = [
-    "Расскажите о своём любимом фильме и почему он вам нравится.",
-    "Поделитесь воспоминаниями о самом ярком событии этого года.",
-    "Опишите свой идеальный день от утра до вечера.",
-    "Расскажите о хобби, которое вас полностью увлекает.",
-    "Какая книга или статья недавно произвела на вас впечатление?"
+    {
+        id: 1,
+        text: "Расскажите о своём любимом фильме и почему он вам нравится.",
+        examples: [
+            "Минем иң яраткан фильмым – 'Кавказ таулары'. Ул гаҗәеп матур һәм мавыктыргыч.",
+            "Фильмда геройларның дуслыгы һәм мәхәббәте күңелгә якын.",
+            "Мин киноны беренче тапкыр караганда бик тәэсирләндем."
+        ]
+    },
+    {
+        id: 2,
+        text: "Поделитесь воспоминаниями о самом ярком событии этого года.",
+        examples: [
+            "Быел минем өчен иң истә калырлык вакыйга – җәйге лагерьга бару.",
+            "Мин конкурсларда катнаштым һәм бүләкләр алдым.",
+            "Шәһәрдә узган фестиваль миңа бик ошады."
+        ]
+    },
+    {
+        id: 3,
+        text: "Опишите свой идеальный день от утра до вечера.",
+        examples: [
+            "Мин иртән уянам, кофе эчәм һәм китап укыйм.",
+            "Көндез паркта йөрергә яратам.",
+            "Кич белән дуслар белән очрашу – иң яхшы тәмамлану."
+        ]
+    },
+    {
+        id: 4,
+        text: "Расскажите о хобби, которое вас полностью увлекает.",
+        examples: [
+            "Мин рәсем ясарга бик яратам.",
+            "Гитарада уйнау минем өчен күңел ачу.",
+            "Китап укудан мин һәрвакыт рәхәт алам."
+        ]
+    },
+    {
+        id: 5,
+        text: "Какая книга или статья недавно произвела на вас впечатление?",
+        examples: [
+            "Мин 'Мәхәббәт һәм мәхрүмият' китабын укыдым, ул бик тәэсирле.",
+            "Мәкаләдә табигатьне саклау турында сөйләнде.",
+            "Китап геройлары миңа бик якын булды."
+        ]
+    }
 ];
 
 const blobToDataURL = (blob) =>
@@ -43,7 +84,7 @@ const Repet = observer(() => {
     useEffect(() => {
         if (chat.messages.length === 0) {
             const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-            chat.addBotMessage(randomTopic);
+            chat.addBotMessage({ text: randomTopic.text, fromTopic: true, topicId: randomTopic.id });
         }
     }, [chat]);
 
@@ -68,19 +109,13 @@ const Repet = observer(() => {
         }
     };
 
-    const handleSendAudio = async () => {
-        if (!input.trim() || loading) return;
-        const msg = chat.addMessage(input);
-        setInput("");
-        setLoading(true);
-
-        try {
-            const { data } = await axios.post(`${apiSpeechUrl}/recognize`, { text: msg.text });
-            chat.addBotMessage(data);
-        } catch (e) {
-            chat.addBotMessage({ text: "Ошибка соединения с сервером." });
-        } finally {
-            setLoading(false);
+    // === Генерация примеров по теме ===
+    const handleExample = (topicId) => {
+        const topic = topics.find((t) => t.id === topicId);
+        if (topic) {
+            topic.examples.forEach((ex) => {
+                chat.addBotMessage({ text: ex });
+            });
         }
     };
 
@@ -146,7 +181,7 @@ const Repet = observer(() => {
     const startNewChat = () => {
         chat.clearChat();
         const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-        chat.addBotMessage(randomTopic);
+        chat.addBotMessage({ text: randomTopic.text, fromTopic: true, topicId: randomTopic.id });
     };
 
     return (
@@ -157,18 +192,22 @@ const Repet = observer(() => {
                         key={msg.id}
                         className={`${styles.message} ${msg.type === "user" ? styles.userMsg : styles.botMsg}`}
                     >
-                        {/* Пользовательский текст или текст бота */}
                         {msg.text && <div className={styles.textBlock}>{msg.text}</div>}
-
-                        {/* Аудио-блок */}
                         {msg.audio && (
                             <div className={styles.audioMessage}>
                                 <audio controls src={msg.audio} />
                             </div>
                         )}
-
-                        {/* Только feedback от бота */}
                         {msg.feedback && <div className={styles.feedback}>{msg.feedback}</div>}
+
+                        {msg.fromTopic && (
+                            <button
+                                className={styles.exampleBtn}
+                                onClick={() => handleExample(msg.topicId)}
+                            >
+                                Например
+                            </button>
+                        )}
                     </div>
                 ))}
 

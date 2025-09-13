@@ -245,3 +245,28 @@
     justify-content: center;
     min-width: 50px;
 }
+.exampleBtn {
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    background-color: #ff4d4f; /* аленькая */
+    color: #fff;
+    font-size: 0.7rem;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.exampleBtn:hover {
+    background-color: #ff7875;
+}
+
+/* чтобы кнопка не "вылазила" за bubble, сделаем родителю position: relative */
+.botMsg {
+    align-self: flex-start;
+    background: var(--color-white);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    position: relative; /* добавлено для кнопки */
+}
