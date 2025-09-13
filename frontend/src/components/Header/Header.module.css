@@ -1,0 +1,88 @@
+@import '../../styles/index.css';
+
+/* ШАПКА */
+.header {
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+    padding: var(--spacing-md) 0;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ЛОГО */
+.logo {
+    font-family: var(--font-accent);
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--color-yellow);
+    cursor: pointer;
+}
+
+/* НАВИГАЦИЯ */
+.nav {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.link {
+    text-decoration: none;
+    color: var(--color-white);
+    font-size: var(--font-size-base);
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: var(--color-yellow);
+}
+
+/* БУРГЕР */
+.burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.burgerLine {
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-white);
+    border-radius: var(--radius-sm);
+}
+
+/* ======= АДАПТИВ ======= */
+@media (max-width: 768px) {
+    .nav {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background-color: var(--color-dark-green);
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-lg);
+        width: 200px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .nav.open {
+        transform: translateX(0);
+    }
+
+    .burger {
+        display: flex;
+    }
+}

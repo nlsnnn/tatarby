@@ -1,0 +1,114 @@
+@import "../../styles/index.css";
+
+.repetPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    height: 100vh;
+    background-color: var(--color-white);
+}
+
+.chatContainer {
+    width: 600px;
+    max-width: 90%;
+    max-height: 70vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-white);
+}
+
+.message {
+    padding: var(--spacing-md);
+    border-radius: 32px;
+    max-width: 75%;
+    word-break: break-word;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.message:hover {
+    transform: scale(1.01);
+}
+
+.userMsg {
+    align-self: center;
+    background-color: #e0e0e0; /* серый цвет */
+    color: #000;
+}
+
+.botMsg {
+    align-self: center;
+    background-color: var(--color-white);
+    color: #000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inputContainer {
+    width: 600px;
+    max-width: 90%;
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+}
+
+.chatInput {
+    flex: 1;
+    padding: var(--spacing-lg);
+    border-radius: 24px;
+    border: 1px solid #ccc;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.chatInput:focus {
+    outline: none;
+    border-color: var(--color-burgundy);
+    box-shadow: 0 0 8px rgba(128, 0, 32, 0.15);
+}
+
+.sendBtn, .audioBtn {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-radius: 24px;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+    border: none;
+}
+
+.sendBtn {
+    background: linear-gradient(145deg, #027a3f, #025c39);
+    color: var(--color-white);
+}
+
+.sendBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.audioBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #a52a2a, #800000);
+    color: var(--color-white);
+}
+
+.audioBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.micro {
+    height: 30px;
+    width: 30px;
+}
