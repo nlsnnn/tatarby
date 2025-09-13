@@ -1,0 +1,106 @@
+/* PROFILE PAGE */
+.profile {
+    padding: var(--spacing-xl) 0;
+    color: #111111;
+}
+
+/* HEADER */
+.header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.name {
+    font-family: var(--font-accent);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.email {
+    font-size: var(--font-size-base);
+    color: #555555;
+}
+
+/* ACHIEVEMENTS */
+.achievements {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.sectionTitle {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: #111111;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+}
+
+.cardImage {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .cardImage {
+    transform: scale(1.05);
+}
+
+.cardContent {
+    padding: var(--spacing-md);
+}
+
+.cardTitle {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.cardDesc {
+    font-size: var(--font-size-base);
+    color: #333333;
+    line-height: 1.4;
+}
+
+/* Адаптив */
+@media (max-width: 480px) {
+    .name {
+        font-size: 1.5rem;
+    }
+
+    .cardImage {
+        height: 140px;
+    }
+}
