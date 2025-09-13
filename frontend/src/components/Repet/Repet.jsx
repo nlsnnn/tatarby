@@ -211,6 +211,18 @@ const Repet = observer(() => {
                     </div>
                 ))}
 
+                {/* === Индикатор загрузки === */}
+                {loading && (
+                    <div className={`${styles.message} ${styles.botMsg}`}>
+                        <div className={styles.typing}>
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                )}
+
+                <div ref={chatEndRef} />
+
+
                 <div ref={chatEndRef} />
             </div>
 
