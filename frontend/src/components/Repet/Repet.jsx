@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import axios from "axios";
 import styles from "./Repet.module.css";
 import { useStores } from "../../stores/RootStoreContext.jsx";
-import {apiSpeechUrl, apiUrl} from "../../constants.js";
+import {apiSpeechUrl} from "../../constants.js";
 
 const topics = [
     "Расскажите о своём любимом фильме и почему он вам нравится.",
@@ -59,6 +59,22 @@ const Repet = observer(() => {
         setLoading(true);
 
         try {
+            const { data } = await axios.post(`${apiSpeechUrl}/check-text`, { text: msg.text });
+            chat.addBotMessage(data);
+        } catch (e) {
+            chat.addBotMessage({ text: "Ошибка соединения с сервером." });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSendAudio = async () => {
+        if (!input.trim() || loading) return;
+        const msg = chat.addMessage(input);
+        setInput("");
+        setLoading(true);
+
+        try {
             const { data } = await axios.post(`${apiSpeechUrl}/recognize`, { text: msg.text });
             chat.addBotMessage(data);
         } catch (e) {
@@ -99,7 +115,7 @@ const Repet = observer(() => {
                         const formData = new FormData();
                         formData.append("file", audioBlob, "voice.webm");
 
-                        const { data } = await axios.post(`${apiUrl}/recognize`, formData, {
+                        const { data } = await axios.post(`${apiSpeechUrl}/recognize`, formData, {
                             headers: { "Content-Type": "multipart/form-data" }
                         });
                         chat.addBotMessage(data);

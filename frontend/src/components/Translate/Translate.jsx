@@ -21,7 +21,7 @@ const Translate = () => {
         const timer = setTimeout(async () => {
             setLoading(true);
             try {
-                const { data } = await axios.post(`${apiSpeechUrl}/recognize`, { text: input });
+                const { data } = await axios.post(`${apiSpeechUrl}/translate`, { text: input });
                 setOutput(data.translated);
 
                 const newRecord = { id: Date.now(), input, output: data.translated };
