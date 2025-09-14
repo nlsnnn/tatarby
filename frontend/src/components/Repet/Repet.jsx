@@ -5,53 +5,13 @@ import styles from "./Repet.module.css";
 import { useStores } from "../../stores/RootStoreContext.jsx";
 import { apiSpeechUrl } from "../../constants.js";
 
-// Тема + словарь примеров
+// Только стартовые идеи (без примеров)
 const topics = [
-    {
-        id: 1,
-        text: "Расскажите о своём любимом фильме и почему он вам нравится.",
-        examples: [
-            "Минем иң яраткан фильмым – 'Кавказ таулары'. Ул гаҗәеп матур һәм мавыктыргыч.",
-            "Фильмда геройларның дуслыгы һәм мәхәббәте күңелгә якын.",
-            "Мин киноны беренче тапкыр караганда бик тәэсирләндем."
-        ]
-    },
-    {
-        id: 2,
-        text: "Поделитесь воспоминаниями о самом ярком событии этого года.",
-        examples: [
-            "Быел минем өчен иң истә калырлык вакыйга – җәйге лагерьга бару.",
-            "Мин конкурсларда катнаштым һәм бүләкләр алдым.",
-            "Шәһәрдә узган фестиваль миңа бик ошады."
-        ]
-    },
-    {
-        id: 3,
-        text: "Опишите свой идеальный день от утра до вечера.",
-        examples: [
-            "Мин иртән уянам, кофе эчәм һәм китап укыйм.",
-            "Көндез паркта йөрергә яратам.",
-            "Кич белән дуслар белән очрашу – иң яхшы тәмамлану."
-        ]
-    },
-    {
-        id: 4,
-        text: "Расскажите о хобби, которое вас полностью увлекает.",
-        examples: [
-            "Мин рәсем ясарга бик яратам.",
-            "Гитарада уйнау минем өчен күңел ачу.",
-            "Китап укудан мин һәрвакыт рәхәт алам."
-        ]
-    },
-    {
-        id: 5,
-        text: "Какая книга или статья недавно произвела на вас впечатление?",
-        examples: [
-            "Мин 'Мәхәббәт һәм мәхрүмият' китабын укыдым, ул бик тәэсирле.",
-            "Мәкаләдә табигатьне саклау турында сөйләнде.",
-            "Китап геройлары миңа бик якын булды."
-        ]
-    }
+    { id: 1, text: "Расскажите о своём любимом фильме и почему он вам нравится." },
+    { id: 2, text: "Поделитесь воспоминаниями о самом ярком событии этого года." },
+    { id: 3, text: "Опишите свой идеальный день от утра до вечера." },
+    { id: 4, text: "Расскажите о хобби, которое вас полностью увлекает." },
+    { id: 5, text: "Какая книга или статья недавно произвела на вас впечатление?" }
 ];
 
 const blobToDataURL = (blob) =>
@@ -81,6 +41,7 @@ const Repet = observer(() => {
     const { chat } = useStores();
     const chatEndRef = useRef(null);
 
+    // первый запуск — выбираем тему
     useEffect(() => {
         if (chat.messages.length === 0) {
             const randomTopic = topics[Math.floor(Math.random() * topics.length)];
@@ -92,7 +53,7 @@ const Repet = observer(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [chat.messages.length]);
 
-    // === Отправка текстового сообщения ===
+    // отправка текстового сообщения
     const handleSend = async () => {
         if (!input.trim() || loading) return;
         const msg = chat.addMessage(input);
@@ -102,24 +63,14 @@ const Repet = observer(() => {
         try {
             const { data } = await axios.post(`${apiSpeechUrl}/check-text`, { text: msg.text });
             chat.addBotMessage(data);
-        } catch (e) {
+        } catch {
             chat.addBotMessage({ text: "Ошибка соединения с сервером." });
         } finally {
             setLoading(false);
         }
     };
 
-    // === Генерация примеров по теме ===
-    const handleExample = (topicId) => {
-        const topic = topics.find((t) => t.id === topicId);
-        if (topic) {
-            topic.examples.forEach((ex) => {
-                chat.addBotMessage({ text: ex });
-            });
-        }
-    };
-
-    // === Отправка голосового сообщения ===
+    // запись и отправка голосового сообщения
     const handleAudioClick = async () => {
         if (!("mediaDevices" in navigator)) {
             alert("Ваш браузер не поддерживает запись аудио.");
@@ -154,7 +105,7 @@ const Repet = observer(() => {
                             headers: { "Content-Type": "multipart/form-data" }
                         });
                         chat.addBotMessage(data);
-                    } catch (e) {
+                    } catch {
                         chat.addBotMessage({ text: "Ошибка при обработке аудио." });
                     } finally {
                         setLoading(false);
@@ -199,19 +150,9 @@ const Repet = observer(() => {
                             </div>
                         )}
                         {msg.feedback && <div className={styles.feedback}>{msg.feedback}</div>}
-
-                        {msg.fromTopic && (
-                            <button
-                                className={styles.exampleBtn}
-                                onClick={() => handleExample(msg.topicId)}
-                            >
-                                Например
-                            </button>
-                        )}
                     </div>
                 ))}
 
-                {/* === Индикатор загрузки === */}
                 {loading && (
                     <div className={`${styles.message} ${styles.botMsg}`}>
                         <div className={styles.typing}>
@@ -219,9 +160,6 @@ const Repet = observer(() => {
                         </div>
                     </div>
                 )}
-
-                <div ref={chatEndRef} />
-
 
                 <div ref={chatEndRef} />
             </div>
@@ -237,11 +175,7 @@ const Repet = observer(() => {
                     disabled={loading}
                 />
 
-                <button
-                    className={styles.audioBtn}
-                    onClick={handleAudioClick}
-                    disabled={loading}
-                >
+                <button className={styles.audioBtn} onClick={handleAudioClick} disabled={loading}>
                     {!recording ? (
                         <img className={styles.micro} src="/icons/mice.png" alt="mic" />
                     ) : "■"}
@@ -251,11 +185,7 @@ const Repet = observer(() => {
                     <div className={styles.recordTimer}>{formatTime(recordTime)}</div>
                 )}
 
-                <button
-                    className={styles.sendBtn}
-                    onClick={handleSend}
-                    disabled={loading}
-                >
+                <button className={styles.sendBtn} onClick={handleSend} disabled={loading}>
                     {loading ? "Ждем ответ..." : "Отправить"}
                 </button>
 
