@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File, UploadFile
 
 from app.api.speech.service import SpeechService
+from app.core.schemas.speech import TextRequest
 
 
 router = APIRouter(prefix="/speech", tags=["Speech"])
@@ -12,14 +13,15 @@ async def recognize_speech(file: UploadFile = File(...)):
 
 
 @router.post("/check-text")
-async def check_text(text: str):
-    return await SpeechService.check_text(text)
+async def check_text(data: TextRequest):
+    return await SpeechService.check_text(data.text)
+
 
 @router.post("/synthesize")
-async def synthesize_speech(text: str, speaker: str = "alsu"):
-    return await SpeechService.synthesize(text, speaker)
+async def synthesize_speech(data: TextRequest, speaker: str = "alsu"):
+    return await SpeechService.synthesize(data.text, speaker)
 
 
 @router.post("/translate")
-async def translate_text(text: str, direction: str = "rus2tat"):
-    return await SpeechService.translate(text, direction)
+async def translate_text(data: TextRequest, direction: str = "rus2tat"):
+    return await SpeechService.translate(data.text, direction)
