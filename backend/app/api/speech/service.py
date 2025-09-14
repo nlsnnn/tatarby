@@ -195,6 +195,7 @@ class SpeechService:
                 original_word in known_tatar_words
                 or corrected_word in known_tatar_words
             )
+            
             if found_full:
                 # Попробуй найти перевод в словаре
                 search_word = (
@@ -205,8 +206,11 @@ class SpeechService:
                 for entry in tat_ru:
                     if entry["Lexem"].lower() == search_word:
                         entry_match = entry
-                        if any(tag in entry_match["Comment"] for tag in excluded_tags):
-                            entry_match = None
+                        try:
+                            if any(tag in entry_match["Comment"] for tag in excluded_tags):
+                                entry_match = None
+                        except Exception:
+                            entry_match = entry
                         break
                 type_ = entry_match["Comment"] if entry_match else "Слово из корпуса"
                 translation = (
