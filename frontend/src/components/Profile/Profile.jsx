@@ -1,5 +1,4 @@
-// Profile.jsx
-import React from 'react';
+import Streak from '../Streak/Streak';
 import styles from './Profile.module.css';
 
 const Profile = () => {
@@ -16,10 +15,13 @@ const Profile = () => {
                 <p className={styles.email}>ainur.shamsutdinov@example.com</p>
             </section>
 
+
+            {/* STREAK */}
+            <Streak />
+
             {/* ACHIEVEMENTS */}
             <section className={styles.achievements} aria-label="Достижения">
                 <h2 className={styles.sectionTitle}>Мои достижения</h2>
-
                 <div className={styles.cards}>
                     <article className={styles.card}>
                         <img
