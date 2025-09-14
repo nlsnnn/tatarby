@@ -93,7 +93,7 @@ const Repet = observer(() => {
 
                 mediaRecorderRef.current.onstop = async () => {
                     try {
-                        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+                        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/mp4" }); // или "audio/ogg"
                         const dataUrl = await blobToDataURL(audioBlob);
                         chat.addMessage({ audio: dataUrl, text: "" });
 
